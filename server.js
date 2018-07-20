@@ -1,7 +1,2 @@
 //TEST TO TEST SYNC WITH GLITCH
-<<<<<<< HEAD
-//TEST 2
-=======
-//TEST 2
-//TEST 3
->>>>>>> 4b46bc2ba1da195dd625d0e6736931f1bd40b13b
+
