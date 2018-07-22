@@ -35,12 +35,8 @@ let pages = [
     {
         title: "Say",
         description:"A command that makes the bot to say what you want",
-        icon:"💬"
-    },
-    {
-        title:"Test",
-        description:"A test page",
-        icon:"ℹ"
+        icon:"💬",
+        command:"say"
     }
 ]
 manager.on("command", (command, message, authorMessage) => {
@@ -84,9 +80,21 @@ manager.on("command", (command, message, authorMessage) => {
                 index++
                 renderPage()
             }
+            if(chosen=="✳"){
+                message.clearReactions()
+                manager.emit("command",page.command,message,authorMessage)
+            }
             reaction.remove(author)
         })
         
+    }
+    if(command=="say"){
+        message.edit("Send your message...")
+        const collector = message.channel.createMessageCollector(message => message.author.id == authorMessage.author.id)
+        collector.on("collect", m => {
+            message.edit(m.content)
+            collector.stop()
+        })
     }
 })
 
