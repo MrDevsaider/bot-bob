@@ -40,19 +40,35 @@ let pages = [
 ]
 manager.on("command", (command, message, authorMessage) => {
     if(command=="menu"){
+        let author = authorMessage.author.id
         index = 0
         page=pages[index]
-        message.edit(
-            new Discord.RichEmbed()
-            .setTitle(page.title)
-            .setDescription(`${page.icon}\n\n${page.description}`)
-        )
-        /*
+        function renderPage() {
+            message.edit(
+                new Discord.RichEmbed()
+                .setTitle(page.title)
+                .setDescription(`${page.icon}\n\n${page.description}`)
+                .setFooter(`${index+1}/${pages.length}`)
+            )
+        }
+        async function initialization(){
+            await message.react("◀")
+            await message.react("▶")
+            await message.react("❌")
+            await message.react("✳")
+            await renderPage()
+        }
+        initialization()
         const collector = message.createReactionCollector((reaction, user) => 
         user.id === author).on("collect", (reaction) => {
-
+            chosen = reaction.emoji.name
+            if(chosen=="❌"){
+                collector.stop()
+                authorMessage.delete()
+                message.delete()
+            }
         })
-        */
+        
     }
 })
 
