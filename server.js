@@ -61,6 +61,10 @@ manager.on("command", (command, message, authorMessage) => {
             await message.react("✳")
             await renderPage()
         }
+        async function emitCommand() {
+            await message.clearReactions()
+            await manager.emit("command",page.command,message,authorMessage)
+        }
         initialization()
         const collector = message.createReactionCollector((reaction, user) => 
         user.id === author).on("collect", (reaction) => {
@@ -81,18 +85,22 @@ manager.on("command", (command, message, authorMessage) => {
                 renderPage()
             }
             if(chosen=="✳"){
-                message.clearReactions()
-                manager.emit("command",page.command,message,authorMessage)
+                emitCommand()
             }
             reaction.remove(author)
         })
         
     }
     if(command=="say"){
-        message.edit("Send your message...")
-        const collector = message.channel.createMessageCollector(message => message.author.id == authorMessage.author.id)
+        message.edit(new Discord.RichEmbed()
+        .setDescription("Send your message...")
+    )
+        const collector = message.channel.createMessageCollector(m => m.author.id == authorMessage.author.id)
         collector.on("collect", m => {
-            message.edit(m.content)
+            message.edit(new Discord.RichEmbed()
+            .setDescription(m.content)
+        )
+        m.delete()
             collector.stop()
         })
     }
