@@ -36,14 +36,21 @@ let pages = [
         title: "Say",
         description:"A command that makes the bot to say what you want",
         icon:"💬"
+    },
+    {
+        title:"Test",
+        description:"A test page",
+        icon:"ℹ"
     }
 ]
 manager.on("command", (command, message, authorMessage) => {
     if(command=="menu"){
         let author = authorMessage.author.id
         index = 0
-        page=pages[index]
+        var page
+        
         function renderPage() {
+            page=pages[index]
             message.edit(
                 new Discord.RichEmbed()
                 .setTitle(page.title)
@@ -67,6 +74,17 @@ manager.on("command", (command, message, authorMessage) => {
                 authorMessage.delete()
                 message.delete()
             }
+            if(chosen=="◀"){
+                if(index-1<0)return
+                index--
+                renderPage()
+            }
+            if(chosen=="▶"){
+                if(index+1>=pages.length)return
+                index++
+                renderPage()
+            }
+            reaction.remove(author)
         })
         
     }
